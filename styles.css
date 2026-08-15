@@ -35,9 +35,9 @@
   --gutter:  1.25rem;
 
   --space-s:  0.75rem;
-  --space-m:  1.5rem;
-  --space-l:  2.5rem;
-  --space-xl: 4rem;
+  --space-m:  1.25rem;
+  --space-l:  1.75rem;
+  --space-xl: 2.5rem;
 }
 
 /* 2. Reset ----------------------------------------------------------------- */
@@ -81,9 +81,9 @@ h1, h2, h3, h4 {
   text-wrap: balance;
 }
 
-h1 { font-size: 2.15rem; letter-spacing: -0.01em; }
-h2 { font-size: 1.6rem;  margin-top: var(--space-xl); }
-h3 { font-size: 1.2rem;  margin-top: var(--space-l); font-family: var(--font-sans); }
+h1 { font-size: 2rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.5rem;  margin-top: var(--space-l); }
+h3 { font-size: 1.15rem; margin-top: var(--space-m); font-family: var(--font-sans); }
 
 h2 + h3, h1 + h2 { margin-top: var(--space-l); }
 
@@ -167,6 +167,27 @@ main { display: block; }
 .band > .wrap > :first-child,
 .band > .wrap--wide > :first-child { margin-top: 0; }
 
+/* The first band on each page. Tighter below, so the content that follows sits
+   higher up the screen. */
+.band--hero { padding-bottom: var(--space-l); }
+.band--hero h1 { margin-bottom: var(--space-s); }
+.band--hero .lede { max-width: 46ch; }
+
+/* Two columns of short lists — "you provide" against "you receive". */
+.cols {
+  display: grid;
+  gap: var(--space-m) var(--space-l);
+  margin-bottom: var(--space-m);
+}
+@media (min-width: 48rem) {
+  .cols { grid-template-columns: 1fr 1fr; }
+}
+.cols > div > :first-child { margin-top: 0; }
+
+/* Denser list for scannable bullets. */
+.tight { padding-left: 1.2em; }
+.tight li { margin-bottom: 0.35em; }
+
 /* 5. Header and navigation ------------------------------------------------- */
 
 .site-header {
@@ -240,7 +261,7 @@ main { display: block; }
 /* 6. Footer ---------------------------------------------------------------- */
 
 .site-footer {
-  margin-top: var(--space-xl);
+  margin-top: 0;
   border-top: 3px solid var(--deep-blue);
   background: var(--tint);
   padding-block: var(--space-l);
@@ -304,12 +325,13 @@ main { display: block; }
 .figures {
   list-style: none;
   padding: 0;
-  margin: var(--space-l) 0;
+  margin: var(--space-m) 0;
   display: grid;
   gap: var(--space-m);
 }
 @media (min-width: 48rem) {
   .figures { grid-template-columns: repeat(3, 1fr); }
+  .figures--pair { grid-template-columns: repeat(2, 1fr); max-width: 44rem; }
 }
 
 .figures li {
@@ -336,7 +358,7 @@ main { display: block; }
 .paths {
   list-style: none;
   padding: 0;
-  margin: var(--space-l) 0;
+  margin: var(--space-m) 0;
   display: grid;
   gap: var(--space-m);
 }
@@ -360,7 +382,7 @@ main { display: block; }
 
 /* 7.4 Callout */
 .callout {
-  margin: var(--space-l) 0;
+  margin: var(--space-m) 0;
   padding: var(--space-m);
   background: var(--tint);
   border-left: 6px solid var(--deep-blue);
@@ -376,7 +398,7 @@ main { display: block; }
 .steps > li {
   position: relative;
   padding-left: 3.25rem;
-  margin-bottom: var(--space-m);
+  margin-bottom: var(--space-s);
   counter-increment: step;
 }
 .steps > li::before {
@@ -400,6 +422,21 @@ main { display: block; }
 .facts dt:first-child { margin-top: 0; }
 .facts dd { margin: 0.25rem 0 0; }
 
+/* Definition list laid out as cards, so a set of short facts reads as a scannable
+   block rather than a column of prose. Each dt/dd pair is wrapped in a div. */
+.facts--grid { display: grid; gap: var(--space-s); }
+@media (min-width: 48rem) {
+  .facts--grid { grid-template-columns: repeat(2, 1fr); }
+}
+.facts--grid > div {
+  padding: var(--space-s) var(--space-m) var(--space-s) var(--space-s);
+  background: var(--paper);
+  border-left: 4px solid var(--amber);
+  border-radius: 0 4px 4px 0;
+}
+.facts--grid dt { margin-top: 0; }
+.band--tint .facts--grid > div { background: var(--paper); }
+
 /* 7.6 Tables */
 .table-scroll { overflow-x: auto; margin-bottom: var(--space-m); }
 table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
@@ -420,6 +457,7 @@ figure { margin-inline: 0; }
    frame in the markup makes that scroll reachable by keyboard. The page itself never
    scrolls horizontally. */
 .figure-frame {
+  max-width: 52rem;
   padding: var(--space-m);
   background: var(--paper);
   border: 1px solid var(--rule);

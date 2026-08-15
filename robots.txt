@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stu2454.github.io/strength-and-balance-program-flyer/sitemap.xml

@@ -1,0 +1,479 @@
+/* ==========================================================================
+   Steady Together — shared stylesheet
+   Plain CSS. No build step. Edit directly.
+   Sections: 1 Tokens · 2 Reset · 3 Typography · 4 Layout · 5 Header/nav
+             6 Footer · 7 Components · 8 Figures · 9 Print
+   ========================================================================== */
+
+/* 1. Tokens ---------------------------------------------------------------- */
+
+:root {
+  /* Palette, inherited from the continuum figure */
+  --amber:      #F0921E;  /* community & home / the left of the continuum */
+  --blue:       #29ABE2;  /* residential care */
+  --green:      #8CC63F;  /* acute care */
+  --deep-blue:  #1064A8;  /* axis arrows, primary accent */
+  --heading:    #1F4E5F;  /* headings */
+  --ink:        #24292E;  /* body text */
+  --muted:      #58595B;  /* secondary text — do not go lighter */
+  --paper:      #FFFFFF;
+  --tint:       #F7F9FA;  /* section backgrounds */
+
+  /* Derived. --rule is used for borders only, never for text. */
+  --rule:       #D3DBDF;
+  --rule-firm:  #A9B6BC;
+  --link:       #0F5A96;  /* deep-blue, darkened for 4.5:1 body-text contrast */
+  --link-visited: #6B3E8F;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+               Arial, sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Palladio,
+                "Book Antiqua", Georgia, serif;
+
+  --measure: 68ch;      /* prose line length */
+  --wide:    64rem;     /* figures, card grids */
+  --gutter:  1.25rem;
+
+  --space-s:  0.75rem;
+  --space-m:  1.5rem;
+  --space-l:  2.5rem;
+  --space-xl: 4rem;
+}
+
+/* 2. Reset ----------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 125%;          /* 20px base at default browser settings */
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+img, svg { max-width: 100%; height: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 3. Typography ------------------------------------------------------------ */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  color: var(--heading);
+  line-height: 1.2;
+  margin: 0 0 var(--space-m);
+  text-wrap: balance;
+}
+
+h1 { font-size: 2.15rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.6rem;  margin-top: var(--space-xl); }
+h3 { font-size: 1.2rem;  margin-top: var(--space-l); font-family: var(--font-sans); }
+
+h2 + h3, h1 + h2 { margin-top: var(--space-l); }
+
+p, ul, ol, dl, blockquote, figure, table { margin: 0 0 var(--space-m); }
+
+ul, ol { padding-left: 1.4em; }
+li { margin-bottom: 0.5em; }
+li > ul, li > ol { margin-top: 0.5em; }
+
+strong { font-weight: 700; }
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+a:visited { color: var(--link-visited); }
+a:hover   { text-decoration-thickness: 0.16em; }
+
+:focus-visible {
+  outline: 3px solid var(--deep-blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+/* Fallback for browsers without :focus-visible support. Do not remove. */
+:focus { outline: 3px solid var(--deep-blue); outline-offset: 3px; }
+:focus:not(:focus-visible) { outline: none; }
+
+.lede {
+  font-size: 1.2rem;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.note {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+abbr[title] { text-decoration: underline dotted; cursor: help; }
+
+/* 4. Layout ---------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: 0;
+  transform: translateY(-120%);
+  z-index: 20;
+  background: var(--paper);
+  color: var(--link);
+  border: 3px solid var(--deep-blue);
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip-link:focus { transform: translateY(0.5rem); }
+
+main { display: block; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.wrap--wide { max-width: var(--wide); }
+
+/* Constrains prose to a comfortable measure inside a wide wrapper. */
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+
+.band {
+  padding-block: var(--space-xl);
+  border-top: 1px solid var(--rule);
+}
+.band:first-of-type { border-top: 0; }
+.band--tint { background: var(--tint); }
+
+.band > .wrap > :first-child,
+.band > .wrap--wide > :first-child { margin-top: 0; }
+
+/* 5. Header and navigation ------------------------------------------------- */
+
+.site-header {
+  border-bottom: 3px solid var(--deep-blue);
+  background: var(--paper);
+}
+
+.site-header__inner {
+  max-width: var(--wide);
+  margin-inline: auto;
+  padding: var(--space-m) var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s) var(--space-m);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.site-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading);
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.4rem 0;
+  min-height: 44px;
+  line-height: 1.5;
+}
+.site-title:visited { color: var(--heading); }
+.site-title .site-title__sub {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+/* Always-visible navigation. No hamburger, at any width. */
+.site-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+}
+.site-nav li { margin: 0; }
+
+.site-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  font-size: 0.9rem;
+}
+.site-nav a:visited { color: var(--link); }
+.site-nav a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+
+/* Current page is marked by weight and rule, not colour alone. */
+.site-nav a[aria-current="page"] {
+  color: var(--heading);
+  font-weight: 700;
+  border-bottom-color: var(--deep-blue);
+}
+
+/* 6. Footer ---------------------------------------------------------------- */
+
+.site-footer {
+  margin-top: var(--space-xl);
+  border-top: 3px solid var(--deep-blue);
+  background: var(--tint);
+  padding-block: var(--space-l);
+  font-size: 0.9rem;
+}
+.site-footer .wrap--wide > * { margin-bottom: var(--space-s); }
+.site-footer h2 {
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  margin: 0 0 var(--space-s);
+}
+.site-footer ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.site-footer p { color: var(--muted); max-width: var(--measure); }
+
+/* 7. Components ------------------------------------------------------------ */
+
+/* 7.1 Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.7rem 1.5rem;
+  background: var(--deep-blue);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 3px solid var(--deep-blue);
+  border-radius: 4px;
+}
+.btn:visited { color: var(--paper); }
+.btn:hover { background: #0B4F86; border-color: #0B4F86; text-decoration: underline; }
+
+.btn--secondary {
+  background: var(--paper);
+  color: var(--link);
+}
+.btn--secondary:visited { color: var(--link); }
+.btn--secondary:hover { background: var(--tint); color: var(--link); }
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s) var(--space-m);
+  margin-bottom: var(--space-m);
+}
+
+/* 7.2 Headline figures */
+.figures {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-l) 0;
+  display: grid;
+  gap: var(--space-m);
+}
+@media (min-width: 48rem) {
+  .figures { grid-template-columns: repeat(3, 1fr); }
+}
+
+.figures li {
+  margin: 0;
+  padding: var(--space-m);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 6px solid var(--amber);
+  border-radius: 4px;
+}
+.figures .stat {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  line-height: 1.15;
+  color: var(--heading);
+  margin-bottom: 0.4rem;
+}
+.figures .stat-unit { font-size: 1.1rem; }
+.figures p { margin: 0; font-size: 0.95rem; }
+.figures .source { display: block; margin-top: 0.6rem; color: var(--muted); font-size: 0.9rem; }
+
+/* 7.3 Path cards — the three audiences */
+.paths {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-l) 0;
+  display: grid;
+  gap: var(--space-m);
+}
+@media (min-width: 48rem) {
+  .paths { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card {
+  margin: 0;
+  padding: var(--space-m);
+  background: var(--tint);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+.card h2, .card h3 { margin-top: 0; font-size: 1.15rem; font-family: var(--font-sans); }
+.card p { font-size: 0.95rem; }
+.card > :last-child { margin-bottom: 0; margin-top: auto; }
+.card .btn { width: 100%; }
+
+/* 7.4 Callout */
+.callout {
+  margin: var(--space-l) 0;
+  padding: var(--space-m);
+  background: var(--tint);
+  border-left: 6px solid var(--deep-blue);
+  border-radius: 0 4px 4px 0;
+}
+.callout > :first-child { margin-top: 0; }
+.callout > :last-child { margin-bottom: 0; }
+.callout h2, .callout h3 { margin-top: 0; font-size: 1.1rem; font-family: var(--font-sans); }
+.callout--caution { border-left-color: var(--amber); }
+
+/* 7.5 Steps and definition lists */
+.steps { counter-reset: step; list-style: none; padding: 0; }
+.steps > li {
+  position: relative;
+  padding-left: 3.25rem;
+  margin-bottom: var(--space-m);
+  counter-increment: step;
+}
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--deep-blue);
+  color: var(--paper);
+  font-weight: 700;
+  border-radius: 50%;
+}
+.steps h3 { margin-top: 0; margin-bottom: 0.35rem; }
+
+.facts dt { font-weight: 700; color: var(--heading); margin-top: var(--space-m); }
+.facts dt:first-child { margin-top: 0; }
+.facts dd { margin: 0.25rem 0 0; }
+
+/* 7.6 Tables */
+.table-scroll { overflow-x: auto; margin-bottom: var(--space-m); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+caption { text-align: left; color: var(--muted); font-size: 0.9rem; padding-bottom: 0.5rem; }
+th, td { text-align: left; padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { color: var(--heading); border-bottom: 2px solid var(--rule-firm); }
+
+/* 7.7 Reference list */
+.references { padding-left: 1.6em; font-size: 0.9rem; }
+.references li { margin-bottom: var(--space-s); }
+
+/* 8. Figures --------------------------------------------------------------- */
+
+figure { margin-inline: 0; }
+
+/* The diagrams carry small labels. Below about 680px the label text would drop under
+   10px, so the frame scrolls sideways instead of shrinking further. tabindex="0" on the
+   frame in the markup makes that scroll reachable by keyboard. The page itself never
+   scrolls horizontally. */
+.figure-frame {
+  padding: var(--space-m);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+.figure-frame svg { display: block; width: 100%; min-width: 34rem; height: auto; }
+
+.scroll-hint {
+  display: none;
+  margin-top: var(--space-s);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+@media (max-width: 44rem) {
+  .scroll-hint { display: block; }
+}
+
+figcaption {
+  margin-top: var(--space-s);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+figcaption b { color: var(--ink); }
+
+/* 8.1 Inline diagrams.
+   Every element below also carries an equivalent SVG presentation attribute, so the
+   diagrams still render correctly with this stylesheet disabled. These rules exist so
+   the diagrams follow the palette tokens when the stylesheet is present. */
+.dia { font-family: var(--font-sans); }
+
+.dia .band-1     { fill: var(--amber); }
+.dia .band-2     { fill: var(--blue); }
+.dia .band-3     { fill: var(--green); }
+.dia .disc       { fill: var(--paper); }
+.dia .box-accent { fill: var(--paper); stroke: var(--deep-blue); }
+
+.dia .stroke     { stroke: var(--deep-blue); }
+.dia .head       { fill: var(--deep-blue); }
+
+.dia .t-label { font-size: 21px; font-weight: 700; fill: var(--ink); }
+.dia .t-sub   { font-size: 15px; fill: var(--muted); }
+.dia .t-axis  { font-size: 16px; font-weight: 600; fill: var(--deep-blue); }
+.dia .t-lead  { font-size: 18px; font-weight: 700; fill: var(--deep-blue); }
+.dia .t-note  { font-size: 14px; fill: var(--muted); }
+.dia .t-tier  { font-size: 19px; font-weight: 700; fill: var(--heading); }
+.dia .t-body  { font-size: 15px; fill: var(--ink); }
+
+/* 9. Print ----------------------------------------------------------------- */
+
+@media print {
+  html { font-size: 100%; }
+  .site-nav, .skip-link, .btn { display: none; }
+  .band { padding-block: 1rem; }
+  a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #000; }
+  .card, .figures li, .figure-frame { break-inside: avoid; }
+}
